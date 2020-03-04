@@ -70,3 +70,28 @@ class ValidatedNestedData(BaseModel):
 async def validation(data: ValidatedNestedData):
     async def validation(data: ValidatedNestedData):
         return {"text": "hello, {data.subData}, {data.subDataList}"}
+
+class ItemOut(BaseModel):
+    strings: str
+    aux: int = 1
+    text: str
+
+@app.get('/', response_model=ItemOut)
+async def response(strings: str, integer: int):
+    return {"text": "hello world", "strings": strings, "integer": integer}
+
+# 辞書に存在しない場合にresponse_modelのattributesのデフォルト値を”入れない”
+@app.get('/unset', response_model=ItemOut, response_model_exclude_unset=True)
+async def response_exclude_unset(strings: str, integer: int):
+    return {"text": "hello world!", "strings": strings, "integer": integer}
+
+# response_modelの"strings", "aux"を無視 -> "text"のみ返す
+@app.get('/exclude', response_model=ItemOut, response_model_exclude={"strings",
+    "aux"})
+async def response_exclude(strings: str, integer: int):
+    return {"text": "hello world!", "strings": strings, "integer": integer}
+
+# response_modelの"text"のみ考慮する -> "text"のみ返す
+@app.get('/include', response_model=ItemOut, response_model_include={"text"})
+async def response_include(text: str, strings: str, integer: int):
+    return {"text": text, "strings": strings, "integer": integer}
