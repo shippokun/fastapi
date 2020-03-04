@@ -1,6 +1,8 @@
-from fastapi import FastAPI, Query, Path, Body
+from fastapi import FastAPI, Query, Path, Body, HTTPException
 from typing import Optional, List
 from pydantic import BaseModel, Field
+from starlette.responses import Response
+from starlette.status import HTTP_201_CREATED
 
 app = FastAPI()
 
@@ -95,3 +97,17 @@ async def response_exclude(strings: str, integer: int):
 @app.get('/include', response_model=ItemOut, response_model_include={"text"})
 async def response_include(text: str, strings: str, integer: int):
     return {"text": text, "strings": strings, "integer": integer}
+
+@app.get('/status', status_code=200) # default status code指定
+async def response_status_code(integer: int, response: Response):
+    if integer > 5:
+        # error handring
+        raise HTTPException(status_code=404, detail="this is error message")
+    elif integer == 1:
+        # set manually
+        response.status_code = HTTP_201_CREATED
+        return {"text": "hello world, created!"}
+    else:
+        # defalut status code
+        return {"text": "hello world!"}
+
