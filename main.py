@@ -19,7 +19,7 @@ async def path_and_query_params(
         path: str,
         query: int,
         default_none: Optional[str] = None):
-    return { "text": "hello, {path}, {query} and {default_none}" }
+    return { "text": f"hello, {path}, {query} and {default_none}" }
 
 @app.get('/validation/{path}')
 async def validation(
@@ -40,11 +40,11 @@ class Data(BaseModel):
 
 @app.post('/post')
 async def declare_request_body(data: Data):
-    return {"text": "hello, {data.string}, {data.default_none}, {data.lists}"}
+    return {"text": f"hello, {data.string}, {data.default_none}, {data.lists}"}
 
 @app.post('/post/embed')
 async def declare_request_body(data: Data = Body(..., embed=True)):
-    return {"text": "hello, {data.string}, {data.default_none}, {data.lists}"}
+    return {"text": f"hello, {data.string}, {data.default_none}, {data.lists}"}
 
 class subDict(BaseModel):
     strings: str
@@ -56,7 +56,7 @@ class NestedData(BaseModel):
 
 @app.post('/post/nested')
 async def declare_nested_request_body(data: NestedData):
-    return {"text": "hello, {data.subData}, {data.subDataList}"}
+    return {"text": f"hello, {data.subData}, {data.subDataList}"}
 
 class ValidatatedSubData(BaseModel):
     # 正規表現で先頭にrつけるとエスケープシーケンスは無効
@@ -71,7 +71,7 @@ class ValidatedNestedData(BaseModel):
 @app.post('/validation')
 async def validation(data: ValidatedNestedData):
     async def validation(data: ValidatedNestedData):
-        return {"text": "hello, {data.subData}, {data.subDataList}"}
+        return {"text": f"hello, {data.subData}, {data.subDataList}"}
 
 class ItemOut(BaseModel):
     strings: str
