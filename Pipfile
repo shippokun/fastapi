@@ -11,6 +11,8 @@ graphene = ">=2.0"
 pydantic = "*"
 sqlalchemy = "*"
 uvicorn = "*"
+requests = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.8"

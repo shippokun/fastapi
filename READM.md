@@ -49,3 +49,9 @@ pipenv check
 ```shell
 pipenv open packageName
 ```
+
+- unittest
+
+```shell
+pipenv run pytest
+```
