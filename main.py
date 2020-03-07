@@ -1,8 +1,10 @@
-from fastapi import FastAPI, Query, Path, Body, HTTPException
+from fastapi import FastAPI, Query, Path, Body, HTTPException, BackgroundTasks
 from typing import Optional, List
 from pydantic import BaseModel, Field
 from starlette.responses import Response
 from starlette.status import HTTP_201_CREATED
+from time import sleep
+from datetime import datetime
 
 app = FastAPI()
 
@@ -111,3 +113,11 @@ async def response_status_code(integer: int, response: Response):
         # defalut status code
         return {"text": "hello world!"}
 
+def time_bomb(count: int):
+    sleep(count)
+    print(f'bomb!!! {datetime.utcnow()}')
+
+@app.get('/{count}')
+async def back(count: int, background_tasks: BackgroundTasks):
+    background_tasks.add_task(time_bomb, count)
+    return {"text": "finish"}   # time_bombの終了を待たずにレスポンスを返す
