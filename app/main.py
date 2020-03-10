@@ -3,14 +3,30 @@ from typing import Optional, List
 from pydantic import BaseModel, Field
 from starlette.responses import Response
 from starlette.status import HTTP_201_CREATED
+from starlette.middleware.cors import CORSMiddleware
 from time import sleep
 from datetime import datetime
+from db import session # DBと接続するためのセッション
+from model import UserTable, User # 使用するモデルをインポート
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def read_root():
     return {"Helllo": "World"}
+
+@app.get("/users")
+async def read_users():
+    users = session.query(UserTable).all()
+    return users
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, q: str = None):
@@ -32,6 +48,10 @@ async def validation(
         path: int = Path(10)):
     return {"string": string, "integer": integer, "alias-query": alias_query,
             "path": path}
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: int, q: str = None):
+    return {"item_id": item_id, "q": q}
 
 
 class Data(BaseModel):
