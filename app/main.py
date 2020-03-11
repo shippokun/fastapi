@@ -21,7 +21,7 @@ app.add_middleware(
 
 @app.get("/")
 async def read_root():
-    return {"Helllo": "World"}
+    return {"Hello": "World"}
 
 @app.get("/users")
 async def read_users():

@@ -128,3 +128,7 @@ pipenv open packageName
 ```shell
 pipenv run pytest
 ```
+
+# テストコードについて
+
+https://www.magata.net/memo/index.php?pytest%C6%FE%CC%E7
