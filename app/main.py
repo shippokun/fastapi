@@ -5,6 +5,7 @@ from starlette.responses import Response
 from starlette.status import HTTP_201_CREATED
 from starlette.middleware.cors import CORSMiddleware
 from time import sleep
+from enum import Enum
 from datetime import datetime
 from db import session # DBと接続するためのセッション
 from model import UserTable, User # 使用するモデルをインポート
@@ -53,6 +54,18 @@ async def validation(
 async def read_item(item_id: int, q: str = None):
     return {"item_id": item_id, "q": q}
 
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
+
+@app.get("/model/{model_name}")
+async def get_model(model_name: ModelName):
+    if model_name == ModelName.alexnet:
+        return {"model_name": model_name, "message": "Deep Learnig FTW!"}
+    if model_name.value == "lenet":
+        return {"model_name": model_name, "message": "LeCNN all the images"}
+    return {"model_name": model_name, "message": "Have seen residuals"}
 
 class Data(BaseModel):
     """request data用の型ヒントがされたクラス"""
