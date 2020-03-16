@@ -4,6 +4,8 @@ from pydantic import BaseModel, Field
 from starlette.responses import Response
 from starlette.status import HTTP_201_CREATED
 from starlette.middleware.cors import CORSMiddleware
+import graphene
+from starlette.graphql import GraphQLApp
 from time import sleep
 from enum import Enum
 from datetime import datetime
@@ -25,6 +27,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class Querys(graphene.ObjectType):
+    hello = graphene.String(name=graphene.String(default_value="stranger"))
+
+    def resole_hello(self, info, name):
+        return "Hello " + name
+
+app.add_route("/", GraphQLApp(schema=graphene.Schema(query=Querys)))
 
 
 @app.get("/")
