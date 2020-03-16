@@ -20,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
@@ -66,6 +67,10 @@ async def get_model(model_name: ModelName):
     if model_name.value == "lenet":
         return {"model_name": model_name, "message": "LeCNN all the images"}
     return {"model_name": model_name, "message": "Have seen residuals"}
+
+@app.get("/files/{file_path:path}")
+async def read_user_me(file_path: str):
+    return {"file_path": file_path}
 
 class Data(BaseModel):
     """request data用の型ヒントがされたクラス"""
