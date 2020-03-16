@@ -7,10 +7,9 @@ from starlette.middleware.cors import CORSMiddleware
 from time import sleep
 from enum import Enum
 from datetime import datetime
-from db import session # DBと接続するためのセッション
-from model import UserTable, User # 使用するモデルをインポート
-
 app = FastAPI()
+from app.db import session # DBと接続するためのセッション
+from app.model import UserTable, User # 使用するモデルをインポート
 
 app.add_middleware(
     CORSMiddleware,
